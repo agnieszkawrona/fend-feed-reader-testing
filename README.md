@@ -2,10 +2,10 @@
 
 Testing the Feed Reader app using Javascript testing framework **Jasmine**.
 
-###### Reference
+#### Reference
 - [Jasmine documentation](http://jasmine.github.io/2.1/introduction.html)
 
-###### How to run?
+#### How to run?
 - Clone or download the repository.
 - Open the folder.
 - Run index.html.
