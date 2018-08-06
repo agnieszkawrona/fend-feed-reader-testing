@@ -21,52 +21,100 @@ $(function() {
          * allFeeds in app.js to be an empty array and refresh the
          * page?
          */
+		 
+		 
+		// Loop throug each feed, checking if it's defined
+
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).not.toBe(0);
         });
 
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a URL defined
-         * and that the URL is not empty.
-         */
+        // Loop throug each feed, checking if the URL is defined and not empty
+
+        it('has a defined and not empty URL', function () {
+            for(let feed of allFeeds){
+                expect(feed.url).toBeDefined();
+                expect(feed.url.length).not.toBe(0);
+            }
+        });
 
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
-         */
+        // Loop throug each feed, checking if it has name defined and not empty
+
+        it('has a defined and not empty URL', function () {
+            for(let feed of allFeeds){
+                expect(feed.name).toBeDefined();
+                expect(feed.name.length).not.toBe(0);
+            }
+        });
     });
 
 
-    /* TODO: Write a new test suite named "The menu" */
+    //This suite is all about the menu
+	
+    describe('Menu', function() {
+		
+		
+		// Checks if there's a class mennu-hidden defined
+		
+		it('is hidden', function() {
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+		});			
+		
+		
+		//Checks if clicking on the icon changes the menu-hidden prop
+		
+		it('changes visibility after click', function() {
+            $('.menu-icon-link').trigger('click');
+            expect($('body').hasClass('menu-hidden')).toBe(false);
+            $('.menu-icon-link').trigger('click');
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+         });
+	});
 
-        /* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
-         */
 
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
+    //This suite is all about the Initial Entries
+	
+    describe('Initial Entries', function() {
+		
+		//Since loadFeed() is asynchronous we need to make sure loadFeed goes first
+		
+		beforeEach(function(done) {
+            loadFeed(0, done);
+        });
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+		
+		//Checks if there is at least one element in the 'feed' container
+		
+        it('has entries', function() {
+            expect($('.feed .entry').length).toBeGreaterThan(0);
+        });
+		
+	});
 
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
-
-    /* TODO: Write a new test suite named "New Feed Selection" */
-
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
+	
+	//This suite is all about the New Feed Selection
+	
+    describe('New Feed Selection', function() {
+		
+		 beforeEach(function(done) {
+            loadFeed(1, function() {
+                oldFeed = $('.feed').html();
+                loadFeed(0, function(){
+					newFeed = $('.feed').html();
+					done();
+				});
+            });
+        });
+		
+		 
+		// Checks if new feed is loaded and the content actually changes
+		
+        it('loaded a new feed, different from the old one', function() {
+            expect(newFeed).not.toBe(oldFeed);
+        });
+		
+	});
 }());
